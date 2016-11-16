@@ -6,11 +6,13 @@ define([], function () {
       var nodeHelpers = scribe.node;
 
       insertHTMLCommandPatch.execute = function (value) {
-        var selection = new scribe.api.Selection();
-        var parent = document.createElement('div');
-        parent.innerHTML = value;
+        scribe.transactionManager.run(function () {
+          var selection = new scribe.api.Selection();
+          var parent = document.createElement('div');
+          parent.innerHTML = value;
 
-        selection.range.insertNode(parent);
+          selection.range.insertNode(parent);
+        }.bind(this));
       };
 
       scribe.commandPatches.insertHTML = insertHTMLCommandPatch;
